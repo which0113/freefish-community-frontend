@@ -1,4 +1,4 @@
-## Freefish 咸鱼社区
+# Freefish 咸鱼社区
 
 ## 环境准备
 
