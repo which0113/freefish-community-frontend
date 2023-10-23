@@ -19,7 +19,7 @@ yarn
 ### 启动项目
 
 ```bash
-npm start
+npm run serve
 ```
 
 ### 构建项目
