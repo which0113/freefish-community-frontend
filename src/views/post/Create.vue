@@ -2,45 +2,45 @@
   <div class="columns">
     <div class="column is-full">
       <el-card
-        class="box-card"
-        shadow="never"
+          class="box-card"
+          shadow="never"
       >
         <div
-          slot="header"
-          class="clearfix"
+            slot="header"
+            class="clearfix"
         >
           <span><i class="fa fa fa-book"> 主题 / 发布主题</i></span>
         </div>
         <div>
           <el-form
-            ref="ruleForm"
-            :model="ruleForm"
-            :rules="rules"
-            class="demo-ruleForm"
+              ref="ruleForm"
+              :model="ruleForm"
+              :rules="rules"
+              class="demo-ruleForm"
           >
             <el-form-item prop="title">
               <el-input
-                v-model="ruleForm.title"
-                placeholder="输入主题名称"
+                  v-model="ruleForm.title"
+                  placeholder="输入主题名称"
               />
             </el-form-item>
 
             <!--Markdown-->
-            <div id="vditor" />
+            <div id="vditor"/>
 
             <b-taginput
-              v-model="ruleForm.tags"
-              class="my-3"
-              maxlength="15"
-              maxtags="3"
-              ellipsis
-              placeholder="请输入主题标签，限制为 15 个字符和 3 个标签"
+                v-model="ruleForm.tags"
+                class="my-3"
+                maxlength="15"
+                maxtags="3"
+                ellipsis
+                placeholder="请输入主题标签，限制为 15 个字符和 3 个标签"
             />
 
             <el-form-item>
               <el-button
-                type="primary"
-                @click="submitForm('ruleForm')"
+                  type="primary"
+                  @click="submitForm('ruleForm')"
               >立即创建
               </el-button>
               <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { post } from '@/api/post'
+import {post} from '@/api/post'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 
@@ -70,7 +70,7 @@ export default {
       },
       rules: {
         title: [
-          { required: true, message: '请输入话题名称', trigger: 'blur' },
+          {required: true, message: '请输入话题名称', trigger: 'blur'},
           {
             min: 1,
             max: 25,
@@ -113,28 +113,34 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (
-            this.contentEditor.getValue().length === 1 ||
-            this.contentEditor.getValue() == null ||
-            this.contentEditor.getValue() === ''
+              this.contentEditor.getValue().length === 1 ||
+              this.contentEditor.getValue() == null ||
+              this.contentEditor.getValue() === ''
           ) {
-            alert('话题内容不可为空')
+            this.$message.info('话题为空')
             return false
           }
           if (this.ruleForm.tags == null || this.ruleForm.tags.length === 0) {
-            alert('标签不可以为空')
+            this.$message.info('标签为空')
             return false
           }
           this.ruleForm.content = this.contentEditor.getValue()
           post(this.ruleForm).then((response) => {
-            const { data } = response
-            setTimeout(() => {
-              this.$router.push({
-                name: 'post-detail',
-                params: { id: data.id }
-              })
-            }, 800)
+            const {code, data} = response
+            if (code === 200) {
+              this.$message.success('话题创建成功')
+              setTimeout(() => {
+                this.$router.push({
+                  name: 'post-detail',
+                  params: {id: data.id}
+                })
+              }, 800)
+            } else {
+              this.$message.error('话题创建失败')
+            }
           })
         } else {
+          this.$message.error('话题创建失败')
           console.log('error submit!!')
           return false
         }

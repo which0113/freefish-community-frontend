@@ -10,8 +10,8 @@
             <el-form :model="topic" ref="topic" class="demo-topic">
               <el-form-item prop="title">
                 <el-input
-                  v-model="topic.title"
-                  placeholder="输入新的主题名称"
+                    v-model="topic.title"
+                    placeholder="输入新的主题名称"
                 ></el-input>
               </el-form-item>
 
@@ -19,16 +19,16 @@
               <div id="vditor"></div>
 
               <b-taginput
-                v-model="tags"
-                class="my-3"
-                maxlength="15"
-                maxtags="3"
-                ellipsis
-                placeholder="请输入主题标签，限制为 15 个字符和 3 个标签"
+                  v-model="tags"
+                  class="my-3"
+                  maxlength="15"
+                  maxtags="3"
+                  ellipsis
+                  placeholder="请输入主题标签，限制为 15 个字符和 3 个标签"
               />
               <el-form-item class="mt-3">
                 <el-button type="primary" @click="handleUpdate()"
-                  >更新
+                >更新
                 </el-button>
                 <el-button @click="resetForm('topic')">重置</el-button>
               </el-form-item>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getTopic, update } from "@/api/post";
+import {getTopic, update} from "@/api/post";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 
@@ -63,7 +63,7 @@ export default {
         height: 460,
         placeholder: "输入要更新的内容",
         preview: {
-          hljs: { style: "monokai" },
+          hljs: {style: "monokai"},
         },
         mode: "sv",
         after: () => {
@@ -81,12 +81,13 @@ export default {
     handleUpdate: function () {
       this.topic.content = this.contentEditor.getValue();
       update(this.topic).then((response) => {
-        const { data } = response;
+        const {data} = response;
         console.log(data);
         setTimeout(() => {
+          this.$message.success('更新成功')
           this.$router.push({
             name: "post-detail",
-            params: { id: data.id },
+            params: {id: data.id},
           });
         }, 800);
       });

@@ -4,20 +4,20 @@
       <form @submit.prevent="onSubmit">
         <b-field>
           <b-input
-            v-model.lazy="commentText"
-            type="textarea"
-            maxlength="400"
-            placeholder="Add a comment..."
-            :disabled="isLoading"
+              v-model.lazy="commentText"
+              type="textarea"
+              maxlength="400"
+              placeholder="Add a comment..."
+              :disabled="isLoading"
           ></b-input>
         </b-field>
         <nav class="level">
           <div class="level-left">
             <b-button
-              type="is-primary"
-              native-type="submit"
-              class="level-item"
-              :disabled="isLoading"
+                type="is-primary"
+                native-type="submit"
+                class="level-item"
+                :disabled="isLoading"
             >
               Comment
             </b-button>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { pushComment } from '@/api/comment'
+import {pushComment} from '@/api/comment'
 
 export default {
   name: 'LvCommentsForm',
@@ -53,6 +53,10 @@ export default {
         console.log(this.commentText)
         postData['content'] = this.commentText
         postData['topic_id'] = this.slug
+        if (this.commentText.trim() === '') {
+          this.$message.error('评论不能为空')
+          return;
+        }
         await pushComment(postData)
         this.$emit('loadComments', this.slug)
         this.$message.success('留言成功')

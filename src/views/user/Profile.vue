@@ -4,7 +4,7 @@
       <div class="column is-one-quarter">
         <el-card shadow="never">
           <div slot="header" class="has-text-centered">
-            <el-avatar :size="64" :src="`https://gravatar.kuibu.net/avatar/${topicUser.id}?s=164&d=monsterid`" />
+            <el-avatar :size="64" :src="`https://gravatar.kuibu.net/avatar/${topicUser.id}?s=164&d=monsterid`"/>
             <p class="mt-3">{{ topicUser.alias || topicUser.username }}</p>
           </div>
           <div>
@@ -63,12 +63,12 @@
 
           <!--分页-->
           <pagination
-            v-show="page.total > 0"
-            class="mt-5"
-            :total="page.total"
-            :page.sync="page.current"
-            :limit.sync="page.size"
-            @pagination="fetchUserById"
+              v-show="page.total > 0"
+              class="mt-5"
+              :total="page.total"
+              :page.sync="page.current"
+              :limit.sync="page.size"
+              @pagination="fetchUserById"
           />
         </el-card>
       </div>
@@ -77,14 +77,15 @@
 </template>
 
 <script>
-import { getInfoByName } from '@/api/user'
+import {getInfoByName} from '@/api/user'
 import pagination from '@/components/Pagination/index'
-import { mapGetters } from 'vuex'
-import { deleteTopic } from '@/api/post'
+import {mapGetters} from 'vuex'
+import {deleteTopic} from '@/api/post'
+import {MessageBox} from 'element-ui';
 
 export default {
   name: 'Profile',
-  components: { pagination },
+  components: {pagination},
   data() {
     return {
       topicUser: {},
@@ -105,7 +106,7 @@ export default {
   methods: {
     fetchUserById() {
       getInfoByName(this.$route.params.username, this.page.current, this.page.size).then((res) => {
-        const { data } = res
+        const {data} = res
         this.topicUser = data.user
         this.page.current = data.topics.current
         this.page.size = data.topics.size
@@ -114,16 +115,26 @@ export default {
       })
     },
     handleDelete(id) {
-      deleteTopic(id).then(value => {
-        const { code, message } = value
-        alert(message)
-
-        if (code === 200) {
-          setTimeout(() => {
-            this.$router.push({ path: '/' })
-          }, 500)
-        }
-      })
+      MessageBox.confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTopic(id).then(value => {
+          const {code, message} = value
+          if (code === 200) {
+            this.$message.success('删除成功')
+            setTimeout(() => {
+              this.$router.go(0);
+              // this.$router.push({path: '/'})
+            }, 500)
+          } else {
+            this.$message.error('删除失败')
+          }
+        })
+      }).catch(() => {
+        // 取消删除操作
+      });
     }
   }
 }

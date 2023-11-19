@@ -4,25 +4,25 @@
     <div class="column is-three-quarters">
       <!--主题-->
       <el-card
-        class="box-card"
-        shadow="never"
+          class="box-card"
+          shadow="never"
       >
         <div
-          slot="header"
-          class="has-text-centered"
+            slot="header"
+            class="has-text-centered"
         >
           <p class="is-size-5 has-text-weight-bold">{{ topic.title }}</p>
           <div class="has-text-grey is-size-7 mt-3">
             <span>{{ dayjs(topic.createTime).format('YYYY/MM/DD HH:mm:ss') }}</span>
-            <el-divider direction="vertical" />
+            <el-divider direction="vertical"/>
             <span>发布者：{{ topicUser.alias }}</span>
-            <el-divider direction="vertical" />
+            <el-divider direction="vertical"/>
             <span>查看：{{ topic.view }}</span>
           </div>
         </div>
 
         <!--Markdown-->
-        <div id="preview" />
+        <div id="preview"/>
 
         <!--标签-->
         <nav class="level has-text-grey is-size-7 mt-6">
@@ -30,9 +30,9 @@
             <p class="level-item">
               <b-taglist>
                 <router-link
-                  v-for="(tag, index) in tags"
-                  :key="index"
-                  :to="{ name: 'tag', params: { name: tag.name } }"
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    :to="{ name: 'tag', params: { name: tag.name } }"
                 >
                   <b-tag type="is-info is-light mr-1">
                     {{ "#" + tag.name }}
@@ -42,58 +42,59 @@
             </p>
           </div>
           <div
-            v-if="token && user.id === topicUser.id"
-            class="level-right"
+              v-if="token && user.id === topicUser.id"
+              class="level-right"
           >
             <router-link
-              class="level-item"
-              :to="{name:'topic-edit',params: {id:topic.id}}"
+                class="level-item"
+                :to="{name:'topic-edit',params: {id:topic.id}}"
             >
               <span class="tag">编辑</span>
             </router-link>
             <a class="level-item">
               <span
-                class="tag"
-                @click="handleDelete(topic.id)"
+                  class="tag"
+                  @click="handleDelete(topic.id)"
               >删除</span>
             </a>
           </div>
         </nav>
       </el-card>
 
-      <lv-comments :slug="topic.id" /> 
+      <lv-comments :slug="topic.id"/>
     </div>
 
     <div class="column">
       <!--作者-->
       <Author
-        v-if="flag"
-        :user="topicUser"
+          v-if="flag"
+          :user="topicUser"
       />
       <!--推荐-->
       <recommend
-        v-if="flag"
-        :topic-id="topic.id"
+          v-if="flag"
+          :topic-id="topic.id"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { deleteTopic, getTopic } from '@/api/post'
-import { mapGetters } from 'vuex'
+import {deleteTopic, getTopic} from '@/api/post'
+import {mapGetters} from 'vuex'
 import Author from '@/views/post/Author'
 import Recommend from '@/views/post/Recommend'
 import LvComments from '@/components/Comment/Comments'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
+import {MessageBox} from "element-ui";
 
 export default {
   name: 'TopicDetail',
-  components: { Author, Recommend, LvComments },
+  components: {Author, Recommend, LvComments},
   computed: {
     ...mapGetters([
-      'token','user'
+      'token', 'user'
     ])
   },
   data() {
@@ -113,13 +114,13 @@ export default {
   methods: {
     renderMarkdown(md) {
       Vditor.preview(document.getElementById('preview'), md, {
-        hljs: { style: 'github' }
+        hljs: {style: 'github'}
       })
     },
     // 初始化
     async fetchTopic() {
       getTopic(this.$route.params.id).then(response => {
-        const { data } = response
+        const {data} = response
         document.title = data.topic.title
 
         this.topic = data.topic
@@ -131,16 +132,26 @@ export default {
       })
     },
     handleDelete(id) {
-      deleteTopic(id).then(value => {
-        const { code, message } = value
-        alert(message)
-
-        if (code === 200) {
-          setTimeout(() => {
-            this.$router.push({ path: '/' })
-          }, 500)
-        }
-      })
+      MessageBox.confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTopic(id).then(value => {
+          const {code, message} = value
+          if (code === 200) {
+            this.$message.success('删除成功')
+            setTimeout(() => {
+              this.$router.go(0);
+              // this.$router.push({path: '/'})
+            }, 500)
+          } else {
+            this.$message.error('删除失败')
+          }
+        })
+      }).catch(() => {
+        // 取消删除操作
+      });
     }
   }
 }
