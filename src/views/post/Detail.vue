@@ -142,8 +142,7 @@ export default {
           if (code === 200) {
             this.$message.success('删除成功')
             setTimeout(() => {
-              this.$router.go(0);
-              // this.$router.push({path: '/'})
+              this.$router.push({path: '/'})
             }, 500)
           } else {
             this.$message.error('删除失败')

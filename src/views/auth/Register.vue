@@ -7,43 +7,44 @@
         </div>
         <div>
           <el-form
-            ref="ruleForm"
-            v-loading="loading"
-            :model="ruleForm"
-            status-icon
-            :rules="rules"
-            label-width="100px"
-            class="demo-ruleForm"
+              ref="ruleForm"
+              v-loading="loading"
+              :model="ruleForm"
+              status-icon
+              :rules="rules"
+              label-width="100px"
+              class="demo-ruleForm"
           >
             <el-form-item label="账号" prop="name">
-              <el-input v-model="ruleForm.name" />
+              <el-input v-model="ruleForm.name"/>
             </el-form-item>
 
             <el-form-item label="密码" prop="pass">
               <el-input
-                v-model="ruleForm.pass"
-                type="password"
-                autocomplete="off"
+                  v-model="ruleForm.pass"
+                  type="password"
+                  autocomplete="off"
               />
             </el-form-item>
 
             <el-form-item label="确认密码" prop="checkPass">
               <el-input
-                v-model="ruleForm.checkPass"
-                type="password"
-                autocomplete="off"
+                  v-model="ruleForm.checkPass"
+                  type="password"
+                  autocomplete="off"
               />
             </el-form-item>
 
             <el-form-item label="邮箱" prop="email">
-              <el-input v-model="ruleForm.email" autocomplete="off" />
+              <el-input v-model="ruleForm.email" autocomplete="off"/>
             </el-form-item>
 
             <el-form-item>
               <el-button
-                type="primary"
-                @click="submitForm('ruleForm')"
-              >立即注册</el-button>
+                  type="primary"
+                  @click="submitForm('ruleForm')"
+              >立即注册
+              </el-button>
               <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { userRegister } from '@/api/auth/auth'
+import {userRegister} from '@/api/auth/auth'
 
 export default {
   name: 'Register',
@@ -78,16 +79,21 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
+          {required: true, message: '请输入学号', trigger: 'blur'},
           {
-            min: 2,
-            max: 10,
-            message: '长度在 2 到 10 个字符',
+            validator: (rule, value, callback) => {
+              const regex = /^[2][1][3]\d{5}$/;
+              if (!regex.test(value)) {
+                callback(new Error('请输入正确的学号'));
+              } else {
+                callback();
+              }
+            },
             trigger: 'blur'
           }
         ],
         pass: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          {required: true, message: '请输入密码', trigger: 'blur'},
           {
             min: 6,
             max: 20,
@@ -96,11 +102,11 @@ export default {
           }
         ],
         checkPass: [
-          { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
+          {required: true, message: '请再次输入密码', trigger: 'blur'},
+          {validator: validatePass, trigger: 'blur'}
         ],
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          {required: true, message: '请输入邮箱地址', trigger: 'blur'},
           {
             type: 'email',
             message: '请输入正确的邮箱地址',
@@ -116,24 +122,24 @@ export default {
         if (valid) {
           this.loading = true
           userRegister(this.ruleForm)
-            .then((value) => {
-              const { code, message } = value
-              if (code === 200) {
-                this.$message({
-                  message: '账号注册成功',
-                  type: 'success'
-                })
-                setTimeout(() => {
-                  this.loading = false
-                  this.$router.push({ path: this.redirect || '/login' })
-                }, 0.1 * 1000)
-              } else {
-                this.$message.error('注册失败，' + message)
-              }
-            })
-            .catch(() => {
-              this.loading = false
-            })
+              .then((value) => {
+                const {code, message} = value
+                if (code === 200) {
+                  this.$message({
+                    message: '账号注册成功',
+                    type: 'success'
+                  })
+                  setTimeout(() => {
+                    this.loading = false
+                    this.$router.push({path: this.redirect || '/login'})
+                  }, 0.1 * 1000)
+                } else {
+                  this.$message.error('注册失败，' + message)
+                }
+              })
+              .catch(() => {
+                this.loading = false
+              })
         } else {
           return false
         }
