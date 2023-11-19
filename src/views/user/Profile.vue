@@ -9,8 +9,12 @@
           </div>
           <div>
             <p class="content">积分：<code>{{ topicUser.score }}</code></p>
+            <p class="content">邮箱：{{ topicUser.email }}</p>
+            <p class="content" v-if="topicUser.mobile!==null&&topicUser.mobile.length>5">手机号：{{
+                topicUser.mobile
+              }}</p>
+            <p class="content" v-if="topicUser.bio!==null&&topicUser.bio.length>0">简介：{{ topicUser.bio }}</p>
             <p class="content">入驻：{{ dayjs(topicUser.createTime).format("YYYY/MM/DD HH:MM:ss") }}</p>
-            <p class="content">简介：{{ topicUser.bio }}</p>
           </div>
         </el-card>
       </div>
