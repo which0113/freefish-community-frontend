@@ -168,6 +168,7 @@ export default {
         return false
       }
       this.$router.push({path: '/search?key=' + this.searchKey})
+      this.searchKey = ''
     }
   }
 }

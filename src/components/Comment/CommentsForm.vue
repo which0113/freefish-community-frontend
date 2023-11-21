@@ -60,6 +60,7 @@ export default {
         await pushComment(postData)
         this.$emit('loadComments', this.slug)
         this.$message.success('留言成功')
+        this.commentText = ''
       } catch (e) {
         this.$buefy.toast.open({
           message: `Cannot comment this story. ${e}`,
