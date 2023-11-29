@@ -91,7 +91,7 @@ export default {
       });
     },
     handleUpdate: function () {
-      if (this.title == null || this.title.length === 0) {
+      if (this.topic.title == null || this.topic.title.length === 0) {
         this.$message.info('话题名称为空')
         return false
       }
