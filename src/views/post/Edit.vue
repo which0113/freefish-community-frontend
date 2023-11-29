@@ -100,11 +100,11 @@ export default {
           this.contentEditor.getValue() == null ||
           this.contentEditor.getValue() === ''
       ) {
-        this.$message.info('话题为空')
+        this.$message.info('话题内容为空')
         return false
       }
       if (this.tags == null || this.tags.length === 0) {
-        this.$message.info('标签为空')
+        this.$message.info('话题标签为空')
         return false
       }
       this.topic.content = this.contentEditor.getValue();

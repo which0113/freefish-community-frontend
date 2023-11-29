@@ -111,39 +111,37 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (
-              this.contentEditor.getValue().length === 1 ||
-              this.contentEditor.getValue() == null ||
-              this.contentEditor.getValue() === ''
-          ) {
-            this.$message.info('话题为空')
-            return false
-          }
-          if (this.ruleForm.tags == null || this.ruleForm.tags.length === 0) {
-            this.$message.info('标签为空')
-            return false
-          }
-          this.ruleForm.content = this.contentEditor.getValue()
-          post(this.ruleForm).then((response) => {
-            const {code, data} = response
-            if (code === 200) {
-              this.$message.success('话题创建成功')
-              setTimeout(() => {
-                this.$router.push({
-                  name: 'post-detail',
-                  params: {id: data.id}
-                })
-              }, 800)
-            } else {
-              this.$message.error('话题创建失败')
-            }
-          })
-        } else {
-          this.$message.error('话题创建失败')
-          console.log('error submit!!')
+        if (this.ruleForm.title == null || this.ruleForm.title.length === 0) {
+          this.$message.info('话题名称为空')
           return false
         }
+        if (
+            this.contentEditor.getValue().length === 1 ||
+            this.contentEditor.getValue() == null ||
+            this.contentEditor.getValue() === ''
+        ) {
+          this.$message.info('话题内容为空')
+          return false
+        }
+        if (this.ruleForm.tags == null || this.ruleForm.tags.length === 0) {
+          this.$message.info('话题标签为空')
+          return false
+        }
+        this.ruleForm.content = this.contentEditor.getValue()
+        post(this.ruleForm).then((response) => {
+          const {code, data} = response
+          if (code === 200) {
+            this.$message.success('话题创建成功')
+            setTimeout(() => {
+              this.$router.push({
+                name: 'post-detail',
+                params: {id: data.id}
+              })
+            }, 800)
+          } else {
+            this.$message.error('话题创建失败')
+          }
+        })
       })
     },
     resetForm(formName) {
