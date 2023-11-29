@@ -8,7 +8,7 @@
           </div>
           <div>
             <el-form :model="topic" ref="topic" class="demo-topic">
-              <el-form-item prop="title">
+              <el-form-item prop="title" :rules="rules.title">
                 <el-input
                     v-model="topic.title"
                     placeholder="输入新的主题名称"
@@ -50,8 +50,20 @@ export default {
   components: {},
   data() {
     return {
+      title: '',
       topic: {},
       tags: [],
+      rules: {
+        title: [
+          {required: true, message: '请输入话题名称', trigger: 'blur'},
+          {
+            min: 1,
+            max: 1024,
+            message: '长度在 1 到 1024 个字符',
+            trigger: 'blur'
+          }
+        ]
+      }
     };
   },
   created() {
@@ -79,6 +91,22 @@ export default {
       });
     },
     handleUpdate: function () {
+      if (this.title == null || this.title.length === 0) {
+        this.$message.info('话题名称为空')
+        return false
+      }
+      if (
+          this.contentEditor.getValue().length === 1 ||
+          this.contentEditor.getValue() == null ||
+          this.contentEditor.getValue() === ''
+      ) {
+        this.$message.info('话题为空')
+        return false
+      }
+      if (this.tags == null || this.tags.length === 0) {
+        this.$message.info('标签为空')
+        return false
+      }
       this.topic.content = this.contentEditor.getValue();
       update(this.topic).then((response) => {
         const {data} = response;
