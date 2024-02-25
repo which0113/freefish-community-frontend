@@ -1,4 +1,12 @@
-# Freefish 咸鱼社区
+<p align="center">
+    <img src=https://img.freefish.love/logo.png width=188/>
+</p>
+<h1 align="center">FreeFish-咸鱼社区</h1>
+<p align="center"><strong>咸鱼社区是一个类似掘金的技术社区</strong></p>
+
+## 项目介绍
+
+本项目类似一个简版的掘金这样的技术社区，实现了多个用户注册，登录，发帖，评论，关注，搜索等功能。
 
 ## 环境准备
 
@@ -28,35 +36,16 @@ npm run serve
 npm run build
 ```
 
-## 在线体验
+## 技术栈
 
-> http://xxx
-
-## 项目主要业务及实现的功能
-
-本项目类似一个简版的掘金这样的技术社区，实现了多个用户注册，登录，发帖，评论，关注，搜索等功能。
-
-## 前端技术栈
-
-Vue
-
-Vuex
-
-Vue Router
-
-Axios
-
-Bulma
-
-Buefy
-
-Element
-
-Vditor
-
-DarkReader
-
-## 致谢
-
-本项目大量借鉴了[极光社区项目](https://github.com/haoyu21/aurora)
-，在此感谢原作者的无私开源。
+- Spring Boot
+- Spring MVC
+- MySQL 数据库
+- Spring Security （JWT 安全校验）
+- Spring Boot Starter（SDK 开发）
+- Swagger + Knife4j 接口文档
+- ElasticSearch 全文搜索
+- Redis 数据缓存
+- Kibana + Canal （MySQL 和 ES 数据同步）
+- MyBatis-Plus 及 MyBatis X 自动生成
+- Hutool、Apache Common Utils、Gson 等工具库
